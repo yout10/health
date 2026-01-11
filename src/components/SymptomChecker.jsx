@@ -109,6 +109,41 @@ const SymptomChecker = () => {
         setError(null);
     };
 
+    const [isListening, setIsListening] = useState(false);
+    const [recognition, setRecognition] = useState(null);
+
+    useEffect(() => {
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognitionInstance = new SpeechRecognition();
+            recognitionInstance.continuous = false;
+            recognitionInstance.interimResults = false;
+            recognitionInstance.lang = 'en-US';
+
+            recognitionInstance.onstart = () => setIsListening(true);
+            recognitionInstance.onend = () => setIsListening(false);
+            recognitionInstance.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                setSymptoms((prev) => prev ? `${prev} ${transcript}` : transcript);
+            };
+
+            setRecognition(recognitionInstance);
+        }
+    }, []);
+
+    const toggleListening = () => {
+        if (!recognition) {
+            alert("Voice input is not supported in this browser.");
+            return;
+        }
+
+        if (isListening) {
+            recognition.stop();
+        } else {
+            recognition.start();
+        }
+    };
+
     return (
         <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-100 max-w-2xl mx-auto mt-8 animate-fade-in relative overflow-hidden">
             {/* Credit Counter Badge */}
@@ -143,17 +178,27 @@ const SymptomChecker = () => {
 
             {!result ? (
                 <div className="space-y-6">
-                    <div>
+                    <div className="relative">
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Describe your symptoms
                         </label>
                         <textarea
-                            className="w-full h-32 p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none transition-all"
+                            className="w-full h-32 p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none transition-all pr-12"
                             placeholder="e.g., I have a throbbing headache and sensitivity to light..."
                             value={symptoms}
                             onChange={(e) => setSymptoms(e.target.value)}
                             disabled={isAnalyzing}
                         />
+                        <button
+                            onClick={toggleListening}
+                            className={`absolute bottom-8 right-4 p-2 rounded-full transition-all ${isListening ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-gray-100 text-gray-500 hover:bg-teal-50 hover:text-medical-teal'}`}
+                            title="Use Voice Input"
+                            disabled={isAnalyzing}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                            </svg>
+                        </button>
                         <p className="text-xs text-gray-400 mt-2 text-right">
                             {apiKey ? "Powered by OpenRouter" : "Running in Demo Mode (No API Key)"}
                         </p>

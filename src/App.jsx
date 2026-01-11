@@ -47,7 +47,10 @@ function App() {
             <div className="max-w-4xl mx-auto">
                 <header className="mb-16">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-8">
-                        <h1 className="text-4xl font-serif text-gray-900 tracking-tight">Q-ADE Health</h1>
+                        <div className="flex items-center gap-4">
+                            <img src="/health.png" alt="Q-ADE Health Logo" className="h-12 w-12 object-contain" />
+                            <h1 className="text-4xl font-serif text-gray-900 tracking-tight">Q-ADE Health</h1>
+                        </div>
 
                         <div className="flex items-center gap-4">
                             {user ? (
