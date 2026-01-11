@@ -6,29 +6,38 @@ const LoginModal = ({ isOpen, onClose }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
-    const { login } = useAuth();
+    const { login, signup } = useAuth(); // Import signup
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     if (!isOpen) return null;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
 
         if (!email || !password || (!isLogin && !name)) {
             setError('Please fill in all fields');
+            setLoading(false);
             return;
         }
 
-        // Mock Authentication Logic
-        const userData = {
-            id: Date.now(),
-            name: isLogin ? email.split('@')[0] : name, // Use part of email if logging in
-            email: email,
-        };
-
-        login(userData);
-        onClose();
+        try {
+            if (isLogin) {
+                await login(email, password);
+            } else {
+                await signup(email, password, name);
+                alert("Account created! Please check your email to verify your account.");
+                setIsLogin(true); // Switch to login view or keep them here
+            }
+            onClose();
+        } catch (err) {
+            console.error(err);
+            setError(err.message || "Failed to authenticate");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -89,9 +98,10 @@ const LoginModal = ({ isOpen, onClose }) => {
 
                     <button
                         type="submit"
-                        className="w-full bg-medical-teal text-white font-medium py-3 rounded hover:bg-teal-700 transition-colors shadow-md"
+                        disabled={loading}
+                        className={`w-full bg-medical-teal text-white font-medium py-3 rounded hover:bg-teal-700 transition-colors shadow-md ${loading ? 'opacity-75 cursor-not-allowed' : ''}`}
                     >
-                        {isLogin ? 'Login' : 'Sign Up'}
+                        {loading ? 'Processing...' : (isLogin ? 'Login' : 'Sign Up')}
                     </button>
                 </form>
 

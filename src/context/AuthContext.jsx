@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import { supabase } from '../lib/supabaseClient';
 
 const AuthContext = createContext(null);
 
@@ -7,48 +8,128 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check local storage for existing session
-        const storedUser = localStorage.getItem('q_ade_user');
-        if (storedUser) {
+        // Check active session
+        const getSession = async () => {
             try {
-                const parsedUser = JSON.parse(storedUser);
-                // Ensure credits exist for legacy stored users
-                if (parsedUser.credits === undefined) {
-                    parsedUser.credits = 5;
+                const { data: { session }, error } = await supabase.auth.getSession();
+                if (error) throw error;
+                if (session) {
+                    await fetchUserProfile(session.user);
                 }
-                setUser(parsedUser);
-            } catch (e) {
-                console.error("Failed to parse stored user", e);
-                localStorage.removeItem('q_ade_user');
+            } catch (error) {
+                console.error("Error fetching session:", error);
+            } finally {
+                setLoading(false);
             }
-        }
-        setLoading(false);
+        };
+
+        getSession();
+
+        // Listen for auth changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+            if (session) {
+                await fetchUserProfile(session.user);
+            } else {
+                setUser(null);
+                setLoading(false);
+            }
+        });
+
+        return () => subscription.unsubscribe();
     }, []);
 
-    const login = (userData) => {
-        // New users get 5 credits
-        const newUser = { ...userData, credits: 5 };
-        setUser(newUser);
-        localStorage.setItem('q_ade_user', JSON.stringify(newUser));
+    const fetchUserProfile = async (authUser) => {
+        try {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', authUser.id)
+                .single();
+
+            if (error) {
+                console.warn("Profile fetch error (might be new user):", error);
+                // Fallback for immediate display if trigger hasn't run yet
+                setUser({ ...authUser, credits: 5 });
+            } else {
+                setUser({ ...authUser, ...data });
+            }
+        } catch (error) {
+            console.error("Error fetching profile:", error);
+        }
     };
 
-    const logout = () => {
+    const login = async (email, password) => {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+        if (error) throw error;
+        return data;
+    };
+
+    const signup = async (email, password, fullName) => {
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    full_name: fullName,
+                },
+            },
+        });
+        if (error) throw error;
+        return data;
+    };
+
+    const logout = async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
         setUser(null);
-        localStorage.removeItem('q_ade_user');
     };
 
-    const deductCredit = () => {
+    const deductCredit = async () => {
         if (user && user.credits > 0) {
-            const updatedUser = { ...user, credits: user.credits - 1 };
-            setUser(updatedUser);
-            localStorage.setItem('q_ade_user', JSON.stringify(updatedUser));
-            return true;
+            // Optimistic update
+            const newCredits = user.credits - 1;
+            setUser({ ...user, credits: newCredits });
+
+            try {
+                const { error } = await supabase
+                    .from('profiles')
+                    .update({ credits: newCredits })
+                    .eq('id', user.id);
+
+                if (error) throw error;
+                return true;
+            } catch (error) {
+                console.error("Error deducting credit:", error);
+                // Revert logic would go here
+                return false;
+            }
         }
         return false;
     };
 
+    // Placeholder for when we add subscription
+    const addCredits = async (amount) => {
+        if (!user) return;
+
+        const newCredits = (user.credits || 0) + amount;
+        setUser({ ...user, credits: newCredits });
+
+        try {
+            const { error } = await supabase
+                .from('profiles')
+                .update({ credits: newCredits })
+                .eq('id', user.id);
+            if (error) throw error;
+        } catch (error) {
+            console.error("Error adding credits:", error);
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, deductCredit, loading }}>
+        <AuthContext.Provider value={{ user, login, signup, logout, deductCredit, addCredits, loading }}>
             {!loading && children}
         </AuthContext.Provider>
     );
