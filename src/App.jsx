@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import FeatureItem from './components/FeatureItem';
 import SymptomChecker from './components/SymptomChecker';
 import LoginModal from './components/LoginModal';
+import SubscriptionModal from './components/SubscriptionModal';
 import { useAuth } from './context/AuthContext';
 
 function App() {
     const [showChecker, setShowChecker] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(false);
     const { user, logout } = useAuth();
 
     const handleStartAnalysis = () => {
@@ -43,6 +45,7 @@ function App() {
     return (
         <div className="min-h-screen bg-white px-6 py-12 md:py-24 font-sans">
             <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+            <SubscriptionModal isOpen={isSubscriptionOpen} onClose={() => setIsSubscriptionOpen(false)} />
 
             <div className="max-w-4xl mx-auto">
                 <header className="mb-16">
@@ -55,20 +58,33 @@ function App() {
                         <div className="flex items-center gap-4">
                             {user ? (
                                 <div className="flex items-center gap-4">
-                                    <span className="text-gray-600 font-medium hidden md:inline">
-                                        {user.name} <span className="text-medical-teal ml-2">({user.credits} Credits)</span>
-                                    </span>
+                                    <div className="flex flex-col items-end">
+                                        <span className="text-gray-600 font-medium hidden md:inline">
+                                            {user.user_metadata?.full_name || user.email?.split('@')[0]}
+                                        </span>
+                                        <span className="text-medical-teal text-sm font-bold">
+                                            {user.credits} Credits
+                                        </span>
+                                    </div>
+
+                                    <button
+                                        onClick={() => setIsSubscriptionOpen(true)}
+                                        className="bg-yellow-500 hover:bg-yellow-600 text-white text-xs px-3 py-1 rounded-full font-bold shadow-sm transition-colors uppercase tracking-wider"
+                                    >
+                                        Get Elite
+                                    </button>
+
                                     {!showChecker && (
                                         <button
                                             onClick={handleStartAnalysis}
-                                            className="bg-medical-teal text-white px-6 py-3 rounded-full font-medium hover:bg-teal-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                                            className="bg-medical-teal text-white px-6 py-3 rounded-full font-medium hover:bg-teal-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 ml-2"
                                         >
-                                            Start AI Analysis
+                                            Start Analysis
                                         </button>
                                     )}
                                     <button
                                         onClick={() => { logout(); setShowChecker(false); }}
-                                        className="text-sm text-gray-500 hover:text-red-500 transition-colors"
+                                        className="text-sm text-gray-500 hover:text-red-500 transition-colors ml-2"
                                     >
                                         Logout
                                     </button>
