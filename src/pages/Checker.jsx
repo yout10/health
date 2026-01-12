@@ -31,7 +31,7 @@ const Checker = ({ onOpenLogin }) => {
     }
 
     return (
-        <div className="space-y-8 animate-fade-in-up">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8 animate-fade-in-up">
             <Link
                 to="/"
                 className="text-gray-500 hover:text-medical-teal flex items-center gap-2 mb-4 transition-colors inline-block"

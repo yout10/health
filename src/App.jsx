@@ -4,8 +4,14 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Checker from './pages/Checker';
 import About from './pages/About';
+import Services from './pages/Services';
+import Footer from './components/Footer';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+import CookiePolicy from './pages/CookiePolicy';
 import LoginModal from './components/LoginModal';
 import SubscriptionModal from './components/SubscriptionModal';
+import Contact from './pages/Contact';
 
 
 function App() {
@@ -14,22 +20,28 @@ function App() {
 
     return (
         <Router>
-            <div className="min-h-screen bg-white px-6 py-12 md:py-24 font-sans">
+            <div className="min-h-screen bg-white font-sans flex flex-col">
                 <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
                 <SubscriptionModal isOpen={isSubscriptionOpen} onClose={() => setIsSubscriptionOpen(false)} />
 
-                <div className="max-w-4xl mx-auto">
-                    <Navbar
-                        onOpenLogin={() => setIsLoginOpen(true)}
-                        onOpenSubscription={() => setIsSubscriptionOpen(true)}
-                    />
+                <Navbar
+                    onOpenLogin={() => setIsLoginOpen(true)}
+                    onOpenSubscription={() => setIsSubscriptionOpen(true)}
+                />
 
+                <main className="flex-grow">
                     <Routes>
                         <Route path="/" element={<Home />} />
+                        <Route path="/services" element={<Services />} />
                         <Route path="/about" element={<About />} />
+                        <Route path="/contact" element={<Contact />} />
+                        <Route path="/terms" element={<Terms />} />
+                        <Route path="/privacy" element={<Privacy />} />
+                        <Route path="/cookie-policy" element={<CookiePolicy />} />
                         <Route path="/checker" element={<Checker onOpenLogin={() => setIsLoginOpen(true)} />} />
                     </Routes>
-                </div>
+                </main>
+                <Footer />
             </div>
         </Router>
     );

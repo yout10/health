@@ -2,7 +2,7 @@ import React from 'react';
 
 const About = () => {
     return (
-        <div className="animate-fade-in max-w-3xl mx-auto space-y-12 text-gray-700">
+        <div className="animate-fade-in max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12 text-gray-700">
             <section>
                 <h1 className="text-4xl font-serif text-gray-900 mb-6">About Q-ADE Health</h1>
                 <p className="text-lg leading-relaxed mb-4">
