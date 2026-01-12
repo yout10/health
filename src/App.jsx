@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Checker from './pages/Checker';
+import About from './pages/About';
 import LoginModal from './components/LoginModal';
 import SubscriptionModal from './components/SubscriptionModal';
+
 
 function App() {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -24,6 +26,7 @@ function App() {
 
                     <Routes>
                         <Route path="/" element={<Home />} />
+                        <Route path="/about" element={<About />} />
                         <Route path="/checker" element={<Checker onOpenLogin={() => setIsLoginOpen(true)} />} />
                     </Routes>
                 </div>

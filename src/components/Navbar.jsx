@@ -14,6 +14,11 @@ const Navbar = ({ onOpenLogin, onOpenSubscription }) => {
                     <h1 className="text-4xl font-serif text-gray-900 tracking-tight">Q-ADE Health</h1>
                 </Link>
 
+                <nav className="hidden md:flex items-center gap-6 text-gray-600 font-medium">
+                    <Link to="/" className="hover:text-medical-teal transition-colors">Home</Link>
+                    <Link to="/about" className="hover:text-medical-teal transition-colors">About</Link>
+                </nav>
+
                 <div className="flex items-center gap-4">
                     {user ? (
                         <div className="flex items-center gap-4">
