@@ -2,4 +2,19 @@
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --bg-primary: #ffffff;
+  --text-primary: #1f2937;
+}
+
+.dark {
+  --bg-primary: #020617;
+  /* slate-950 */
+  --text-primary: #f8fafc;
+  /* slate-50 */
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

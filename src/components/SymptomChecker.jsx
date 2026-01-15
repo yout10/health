@@ -145,7 +145,7 @@ const SymptomChecker = () => {
     };
 
     return (
-        <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-100 max-w-2xl mx-auto mt-8 animate-fade-in relative overflow-hidden">
+        <div className="bg-white dark:bg-white/5 p-8 rounded-lg shadow-lg border border-gray-100 dark:border-white/10 max-w-2xl mx-auto mt-8 animate-fade-in relative overflow-hidden backdrop-blur-sm transition-colors duration-300">
             {/* Credit Counter Badge */}
             <div className="absolute top-4 left-4">
                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium 
@@ -154,24 +154,23 @@ const SymptomChecker = () => {
                 </span>
             </div>
 
-            {/* API Key Input Section */}
             <div className="absolute top-0 right-0 p-4">
                 <input
                     type="password"
                     placeholder="Enter OpenRouter Key"
-                    className="text-xs bg-gray-50 border border-gray-200 rounded px-2 py-1 focus:outline-none focus:border-medical-teal w-32 focus:w-48 transition-all"
+                    className="text-xs bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded px-2 py-1 focus:outline-none focus:border-medical-teal dark:text-gray-200 w-32 focus:w-48 transition-all"
                     value={apiKey}
                     onChange={handleApiKeyChange}
                     title="Enter your OpenRouter API Key for real analysis"
                 />
             </div>
 
-            <h2 className="text-2xl font-serif text-gray-800 mb-6 flex items-center justify-center gap-2 mt-8 md:mt-0">
+            <h2 className="text-2xl font-serif text-gray-800 dark:text-white mb-6 flex items-center justify-center gap-2 mt-8 md:mt-0">
                 <span className="text-medical-teal">✦</span> AI Symptom Analysis
             </h2>
 
             {error && (
-                <div className="bg-red-50 text-red-600 p-4 rounded-md mb-6 text-sm">
+                <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-md mb-6 text-sm">
                     {error}
                 </div>
             )}
@@ -179,11 +178,11 @@ const SymptomChecker = () => {
             {!result ? (
                 <div className="space-y-6">
                     <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Describe your symptoms
                         </label>
                         <textarea
-                            className="w-full h-32 p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none transition-all pr-12"
+                            className="w-full h-32 p-4 border border-gray-300 dark:border-white/10 rounded-md focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none transition-all pr-12 bg-white dark:bg-black/20 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                             placeholder="e.g., I have a throbbing headache and sensitivity to light..."
                             value={symptoms}
                             onChange={(e) => setSymptoms(e.target.value)}
@@ -227,25 +226,25 @@ const SymptomChecker = () => {
                 </div>
             ) : (
                 <div className="space-y-6 animate-fade-in">
-                    <div className="p-4 bg-teal-50 border-l-4 border-medical-teal rounded-r-md">
-                        <h3 className="text-sm font-bold uppercase tracking-wider text-teal-800 mb-1">Risk Assessment</h3>
-                        <p className="text-3xl font-serif text-teal-900">{result.risk}</p>
+                    <div className="p-4 bg-teal-50 dark:bg-teal-900/20 border-l-4 border-medical-teal rounded-r-md">
+                        <h3 className="text-sm font-bold uppercase tracking-wider text-teal-800 dark:text-teal-400 mb-1">Risk Assessment</h3>
+                        <p className="text-3xl font-serif text-teal-900 dark:text-teal-200">{result.risk}</p>
                     </div>
 
                     <div>
-                        <h3 className="text-lg font-bold text-gray-800 mb-2">Preliminary Evaluation</h3>
-                        <p className="text-gray-600 leading-relaxed">{result.evaluation}</p>
+                        <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2">Preliminary Evaluation</h3>
+                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{result.evaluation}</p>
                     </div>
 
                     <div>
-                        <h3 className="text-lg font-bold text-gray-800 mb-2">Recommended Actions</h3>
-                        <p className="text-gray-600 leading-relaxed bg-gray-50 p-4 rounded-md">{result.guidance}</p>
+                        <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2">Recommended Actions</h3>
+                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-white/5 p-4 rounded-md">{result.guidance}</p>
                     </div>
 
                     <div className="flex flex-col gap-2">
                         <button
                             onClick={handleReset}
-                            className="w-full py-3 px-6 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors font-medium"
+                            className="w-full py-3 px-6 border border-gray-300 dark:border-white/10 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors font-medium"
                         >
                             Start New Analysis
                         </button>

@@ -32,16 +32,16 @@ const Home = () => {
             <section className="relative px-4 sm:px-6 lg:px-8 py-20 lg:py-32 max-w-7xl mx-auto">
                 <div className="flex flex-col-reverse md:flex-row items-center gap-12 lg:gap-24">
                     <div className="flex-1 space-y-8 text-center md:text-left">
-                        <div className="inline-block px-4 py-2 bg-teal-50 text-medical-teal rounded-full text-sm font-bold tracking-wide uppercase mb-2">
+                        <div className="inline-block px-4 py-2 bg-teal-50 dark:bg-teal-400/10 text-medical-teal dark:text-teal-300 rounded-full text-sm font-bold tracking-wide uppercase mb-2">
                             Advanced AI Health Assistant
                         </div>
-                        <h1 className="text-5xl md:text-6xl font-serif text-gray-900 leading-tight">
+                        <h1 className="text-5xl md:text-6xl font-serif text-gray-900 dark:text-gray-100 leading-tight">
                             Your Health, <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-medical-teal to-teal-400">
                                 Decoded by Intelligence.
                             </span>
                         </h1>
-                        <p className="text-gray-600 text-lg md:text-xl leading-relaxed max-w-lg mx-auto md:mx-0">
+                        <p className="text-gray-600 dark:text-gray-300 text-lg md:text-xl leading-relaxed max-w-lg mx-auto md:mx-0">
                             Instant, reliable preliminary medical guidance powered by next-generation Artificial Intelligence.
                             Understanding your symptoms has never been this fast.
                         </p>
@@ -54,7 +54,7 @@ const Home = () => {
                             </Link>
                             <Link
                                 to="/services"
-                                className="w-full sm:w-auto px-8 py-4 rounded-full font-bold text-gray-700 hover:bg-gray-100 transition-colors border border-gray-200 text-center"
+                                className="w-full sm:w-auto px-8 py-4 rounded-full font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors border border-gray-200 dark:border-white/10 text-center"
                             >
                                 Learn More
                             </Link>
@@ -82,19 +82,19 @@ const Home = () => {
             </section>
 
             {/* Features Grid */}
-            <section className="bg-gray-50 py-24">
+            <section className="bg-gray-50 dark:bg-slate-900/50 py-24 transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center max-w-2xl mx-auto mb-16">
-                        <h2 className="text-3xl font-serif text-gray-900 mb-4">Why Trust Q-ADE?</h2>
-                        <p className="text-gray-600">Built with precision, prioritized for your peace of mind.</p>
+                        <h2 className="text-3xl font-serif text-gray-900 dark:text-white mb-4">Why Trust Q-ADE?</h2>
+                        <p className="text-gray-600 dark:text-gray-300">Built with precision, prioritized for your peace of mind.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                         {features.map((feature, index) => (
-                            <div key={index} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-shadow flex items-start gap-6">
-                                <span className="text-4xl font-serif text-teal-100 font-bold">{feature.number}</span>
+                            <div key={index} className="bg-white dark:bg-white/5 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-white/5 hover:shadow-lg transition-all flex items-start gap-6 backdrop-blur-sm">
+                                <span className="text-4xl font-serif text-teal-100 dark:text-teal-500/20 font-bold">{feature.number}</span>
                                 <div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
-                                    <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{feature.title}</h3>
+                                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{feature.description}</p>
                                 </div>
                             </div>
                         ))}
